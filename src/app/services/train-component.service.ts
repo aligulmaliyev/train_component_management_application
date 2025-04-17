@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TrainComponent } from '../models/train-component.model';
+import { PagedResult, TrainComponent } from '../models/train-component.model';
 
 @Injectable({ providedIn: 'root' })
 export class ComponentService {
@@ -13,12 +13,13 @@ export class ComponentService {
     search: string = '',
     page: number = 1,
     pageSize: number = 10
-  ): Observable<TrainComponent[]> {
+  ): Observable<PagedResult<TrainComponent>> {
     let params = new HttpParams()
       .set('search', search)
       .set('page', page)
       .set('pageSize', pageSize);
-    return this.http.get<TrainComponent[]>(`${this.baseUrl}/components`, { params });
+  
+    return this.http.get<PagedResult<TrainComponent>>(`${this.baseUrl}/components`, { params });
   }
 
   create(component: Partial<TrainComponent>) {
@@ -27,9 +28,5 @@ export class ComponentService {
 
   assignQuantity(componentId: number, quantity: number) {
     return this.http.post(`${this.baseUrl}/components/${componentId}/assign-quantity/${quantity}`, {});
-  }
-
-  search(query: string): Observable<TrainComponent[]> {
-    return this.http.get<TrainComponent[]>(`${this.baseUrl}/components/?search=${query}`);
   }
 }

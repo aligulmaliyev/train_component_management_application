@@ -83,7 +83,9 @@ export class ComponentCreateComponent {
   onSubmit(): void {
     if (this.componentForm.valid) {
       console.log('New Component:', this.componentForm.value);
-      this.componentService.create(this.componentForm.value);
+      this.componentService
+              .create(this.componentForm.value)
+              .subscribe(() => this.dialogRef.close());
     }
   }
 }

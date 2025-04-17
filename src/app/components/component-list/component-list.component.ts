@@ -56,6 +56,8 @@ export class ComponentListComponent implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator();
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
+  totalCount: number = 0;
+
   constructor(private componentService: ComponentService) { }
 
   ngAfterViewInit() {
@@ -66,15 +68,17 @@ export class ComponentListComponent implements AfterViewInit {
   }
 
   getAllComponent(page: number = 1, pageSize: number = 10) {
-    this.componentService.getAll('', page, pageSize).subscribe((data) => {
-      this.components.data = data;
+    this.componentService.getAll('', page, pageSize).subscribe((result) => {
+      this.components.data = result.items;
+      this.totalCount = result.totalCount;
     });
   }
 
   searchComponent(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.componentService.search(filterValue).subscribe((data) => {
-      this.components.data = data;
+    this.componentService.getAll(filterValue, 1, 10).subscribe((result) => {
+      this.components.data = result.items;
+      this.totalCount = result.totalCount;
       this.setFirstPagePaginate();
     });
   }
