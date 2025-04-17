@@ -67,7 +67,7 @@ export class ComponentListComponent implements AfterViewInit {
     this.getAllComponent();
   }
 
-  getAllComponent(page: number = 1, pageSize: number = 10) {
+  getAllComponent(page: number = 0, pageSize: number = 25) {
     this.componentService.getAll('', page, pageSize).subscribe((result) => {
       this.components.data = result.items;
       this.totalCount = result.totalCount;
@@ -76,7 +76,7 @@ export class ComponentListComponent implements AfterViewInit {
 
   searchComponent(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.componentService.getAll(filterValue, 1, 10).subscribe((result) => {
+    this.componentService.getAll(filterValue, 0, 25).subscribe((result) => {
       this.components.data = result.items;
       this.totalCount = result.totalCount;
       this.setFirstPagePaginate();
@@ -84,7 +84,7 @@ export class ComponentListComponent implements AfterViewInit {
   }
 
   onChangePaginate(e: PageEvent) {
-    this.getAllComponent(e.pageIndex + 1, e.pageSize);
+    this.getAllComponent(e.pageIndex, e.pageSize);
   }
 
   saveAssignQuantity(id: number, quantity: number) {
